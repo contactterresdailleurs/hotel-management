@@ -307,3 +307,53 @@ Best regards`;
                         </button>
                         {editingHotel && <button onClick={cancelEdit} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg">Annuler</button>}
                       </div>
+</div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {showEmailsModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+                <div className="p-6 border-b flex items-center justify-between">
+                  <h2 className="text-2xl font-bold">Emails - {bookingRequest.totalPersons} pax ({generatedEmails.length} hôtels)</h2>
+                  <button onClick={() => setShowEmailsModal(false)} className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg"><X className="w-6 h-6" /></button>
+                </div>
+                <div className="p-6 border-b bg-purple-50">
+                  <button onClick={openAllEmails} className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 font-semibold text-lg">
+                    <Send className="w-6 h-6" />Ouvrir tous les emails ({generatedEmails.length})
+                  </button>
+                  <p className="text-sm text-gray-600 text-center mt-3">Un par seconde</p>
+                </div>
+                <div className="overflow-y-auto p-6 space-y-6">
+                  {generatedEmails.map((email, index) => (
+                    <div key={index} className="bg-gray-50 rounded-xl p-5 border">
+                      <div className="flex justify-between mb-4">
+                        <div>
+                          <h3 className="font-semibold text-lg mb-1">{email.hotel.name}</h3>
+                          <p className="text-sm text-gray-600 flex items-center gap-1"><Mail className="w-4 h-4" />{email.hotel.email}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => copyToClipboard(email.body, index)} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm">
+                            {copiedIndex === index ? <><Check className="w-4 h-4" />Copié</> : <><Copy className="w-4 h-4" />Copier</>}
+                          </button>
+                          <button onClick={() => openEmailClient(email)} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm"><Send className="w-4 h-4" />Ouvrir</button>
+                        </div>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg border">
+                        <p className="text-sm font-semibold mb-2">Objet: {email.subject}</p>
+                        <pre className="text-sm whitespace-pre-wrap">{email.body}</pre>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<HotelManagementApp />, document.getElementById('root'));
+</script>
