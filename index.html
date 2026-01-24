@@ -1,186 +1,166 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion Hôtelière - Agence de Voyage</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-    <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        
-        const Hotel = () => <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>;
-        const Mail = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>;
-        const Plus = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>;
-        const Send = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>;
-        const Star = ({ className }) => <svg className={className} fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>;
-        const Trash2 = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
-        const Building2 = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>;
-        const Copy = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>;
-        const Check = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>;
-        const X = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
-        const Edit = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>;
-        const Search = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>;
-        const Download = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>;
-        const Upload = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L9 8m4-4v12" /></svg>;
+import React, { useState, useEffect } from 'react';
+import { Hotel, Mail, Plus, Send, Star, Trash2, Building2, Copy, Check, X, Edit, Search, Download, Upload } from 'lucide-react';
 
-        function HotelManagementApp() {
-          const [hotels, setHotels] = useState([]);
-          const [showAddForm, setShowAddForm] = useState(false);
-          const [showRequestForm, setShowRequestForm] = useState(false);
-          const [showEmailsModal, setShowEmailsModal] = useState(false);
-          const [generatedEmails, setGeneratedEmails] = useState([]);
-          const [copiedIndex, setCopiedIndex] = useState(null);
-          const [editingHotel, setEditingHotel] = useState(null);
-          const [searchTerm, setSearchTerm] = useState('');
-          
-          const [newHotel, setNewHotel] = useState({
-            name: '',
-            city: '',
-            email: '',
-            stars: 3,
-            notes: ''
-          });
+function HotelManagementApp() {
+  const [hotels, setHotels] = useState([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showRequestForm, setShowRequestForm] = useState(false);
+  const [showEmailsModal, setShowEmailsModal] = useState(false);
+  const [generatedEmails, setGeneratedEmails] = useState([]);
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [editingHotel, setEditingHotel] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  
+  const [newHotel, setNewHotel] = useState({
+    name: '',
+    city: '',
+    email: '',
+    stars: 3,
+    notes: ''
+  });
 
-          const [bookingRequest, setBookingRequest] = useState({
-            city: '',
-            checkIn: '',
-            checkOut: '',
-            totalPersons: '',
-            single: '',
-            doubleTwin: '',
-            triple: '',
-            family: ''
-          });
+  const [bookingRequest, setBookingRequest] = useState({
+    city: '',
+    checkIn: '',
+    checkOut: '',
+    totalPersons: '',
+    single: '',
+    doubleTwin: '',
+    triple: '',
+    family: ''
+  });
 
-          useEffect(() => {
-            loadData();
-          }, []);
+  useEffect(() => {
+    loadData();
+  }, []);
 
-          useEffect(() => {
-            if (hotels.length > 0) {
-              saveData();
-            }
-          }, [hotels]);
+  useEffect(() => {
+    if (!loading && hotels.length > 0) {
+      saveData();
+    }
+  }, [hotels, loading]);
 
-          const loadData = () => {
-            const saved = localStorage.getItem('hotels-database');
-            if (saved) {
-              try {
-                setHotels(JSON.parse(saved));
-              } catch (e) {
-                console.error('Erreur de chargement:', e);
-              }
-            }
-          };
+  const loadData = async () => {
+    try {
+      const result = await window.storage.get('hotels-database');
+      if (result && result.value) {
+        setHotels(JSON.parse(result.value));
+      }
+    } catch (e) {
+      console.log('Aucune donnée sauvegardée');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-          const saveData = () => {
-            localStorage.setItem('hotels-database', JSON.stringify(hotels));
-          };
+  const saveData = async () => {
+    try {
+      await window.storage.set('hotels-database', JSON.stringify(hotels));
+    } catch (e) {
+      console.error('Erreur de sauvegarde:', e);
+    }
+  };
 
-          const addHotel = () => {
-            if (newHotel.name && newHotel.city && newHotel.email) {
-              setHotels([...hotels, { ...newHotel, id: Date.now() }]);
-              setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
-              setShowAddForm(false);
-            }
-          };
+  const addHotel = () => {
+    if (newHotel.name && newHotel.city && newHotel.email) {
+      setHotels([...hotels, { ...newHotel, id: Date.now() }]);
+      setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
+      setShowAddForm(false);
+    }
+  };
 
-          const deleteHotel = (id) => {
-            setHotels(hotels.filter(h => h.id !== id));
-          };
+  const deleteHotel = (id) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet hôtel ?')) {
+      setHotels(hotels.filter(h => h.id !== id));
+    }
+  };
 
-          const startEdit = (hotel) => {
-            setEditingHotel(hotel);
-            setNewHotel({
-              name: hotel.name,
-              city: hotel.city,
-              email: hotel.email,
-              stars: hotel.stars,
-              notes: hotel.notes || ''
-            });
-            setShowAddForm(true);
-          };
+  const startEdit = (hotel) => {
+    setEditingHotel(hotel);
+    setNewHotel({
+      name: hotel.name,
+      city: hotel.city,
+      email: hotel.email,
+      stars: hotel.stars,
+      notes: hotel.notes || ''
+    });
+    setShowAddForm(true);
+  };
 
-          const updateHotel = () => {
-            if (newHotel.name && newHotel.city && newHotel.email) {
-              setHotels(hotels.map(h => 
-                h.id === editingHotel.id 
-                  ? { ...newHotel, id: editingHotel.id }
-                  : h
-              ));
-              setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
-              setEditingHotel(null);
-              setShowAddForm(false);
-            }
-          };
+  const updateHotel = () => {
+    if (newHotel.name && newHotel.city && newHotel.email) {
+      setHotels(hotels.map(h => 
+        h.id === editingHotel.id 
+          ? { ...newHotel, id: editingHotel.id }
+          : h
+      ));
+      setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
+      setEditingHotel(null);
+      setShowAddForm(false);
+    }
+  };
 
-          const cancelEdit = () => {
-            setEditingHotel(null);
-            setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
-            setShowAddForm(false);
-          };
+  const cancelEdit = () => {
+    setEditingHotel(null);
+    setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
+    setShowAddForm(false);
+  };
 
-          const exportDatabase = () => {
-            const dataStr = JSON.stringify(hotels, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `hotels-database-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            URL.revokeObjectURL(url);
-          };
+  const exportDatabase = () => {
+    const dataStr = JSON.stringify(hotels, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `hotels-database-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
-          const importDatabase = (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
+  const importDatabase = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              try {
-                const importedHotels = JSON.parse(e.target.result);
-                if (Array.isArray(importedHotels)) {
-                  const confirmed = window.confirm(
-                    `Importer ${importedHotels.length} hôtel(s) ?\n\nAttention: Cela remplacera votre base de données actuelle (${hotels.length} hôtel(s)).`
-                  );
-                  if (confirmed) {
-                    setHotels(importedHotels);
-                    alert(`✅ ${importedHotels.length} hôtel(s) importé(s) avec succès !`);
-                  }
-                } else {
-                  alert('❌ Fichier invalide. Le fichier doit contenir une liste d\'hôtels.');
-                }
-              } catch (error) {
-                alert('❌ Erreur lors de la lecture du fichier.');
-              }
-            };
-            reader.readAsText(file);
-            event.target.value = '';
-          };
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedHotels = JSON.parse(e.target.result);
+        if (Array.isArray(importedHotels)) {
+          const confirmed = window.confirm(
+            `Importer ${importedHotels.length} hôtel(s) ?\n\nAttention: Cela remplacera votre base de données actuelle (${hotels.length} hôtel(s)).`
+          );
+          if (confirmed) {
+            setHotels(importedHotels);
+            alert(`✅ ${importedHotels.length} hôtel(s) importé(s) avec succès !`);
+          }
+        } else {
+          alert('❌ Fichier invalide. Le fichier doit contenir une liste d\'hôtels.');
+        }
+      } catch (error) {
+        alert('❌ Erreur lors de la lecture du fichier.');
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  };
 
-          const cities = [...new Set(hotels.map(h => h.city))].sort();
+  const cities = [...new Set(hotels.map(h => h.city))].sort();
 
-          const filteredHotels = hotels.filter(hotel => {
-            const search = searchTerm.toLowerCase();
-            return hotel.name.toLowerCase().includes(search) || 
-                   hotel.city.toLowerCase().includes(search);
-          });
+  const filteredHotels = hotels.filter(hotel => {
+    const search = searchTerm.toLowerCase();
+    return hotel.name.toLowerCase().includes(search) || 
+           hotel.city.toLowerCase().includes(search);
+  });
 
-          const generateEmailText = () => {
-            const rooms = [];
-            if (bookingRequest.single) rooms.push(`${bookingRequest.single} Single room(s)`);
-            if (bookingRequest.doubleTwin) rooms.push(`${bookingRequest.doubleTwin} Double/Twin room(s)`);
-            if (bookingRequest.triple) rooms.push(`${bookingRequest.triple} Triple room(s)`);
-            if (bookingRequest.family) rooms.push(`${bookingRequest.family} Family room(s)`);
+  const generateEmailText = () => {
+    const rooms = [];
+    if (bookingRequest.single) rooms.push(`${bookingRequest.single} Single room(s)`);
+    if (bookingRequest.doubleTwin) rooms.push(`${bookingRequest.doubleTwin} Double/Twin room(s)`);
+    if (bookingRequest.triple) rooms.push(`${bookingRequest.triple} Triple room(s)`);
+    if (bookingRequest.family) rooms.push(`${bookingRequest.family} Family room(s)`);
 
-            return `Hi,
+    return `Hi,
 
 We are looking for availability for a group of ${bookingRequest.totalPersons} person(s).
 
@@ -199,186 +179,448 @@ Could you please confirm:
 We remain at your disposal for any further information.
 
 Best regards`;
-          };
+  };
 
-          const generateAllEmails = () => {
-            const hotelsInCity = hotels.filter(h => h.city === bookingRequest.city);
+  const generateAllEmails = () => {
+    const hotelsInCity = hotels.filter(h => h.city === bookingRequest.city);
+    
+    if (hotelsInCity.length === 0) {
+      alert('Aucun hôtel trouvé dans cette ville');
+      return;
+    }
+
+    const emails = hotelsInCity.map(hotel => ({
+      hotel: hotel,
+      subject: `Availability request group ${bookingRequest.totalPersons} pax`,
+      body: generateEmailText()
+    }));
+
+    setGeneratedEmails(emails);
+    setShowEmailsModal(true);
+  };
+
+  const copyToClipboard = (text, index) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2000);
+    });
+  };
+
+  const openEmailClient = (email) => {
+    const mailtoLink = `mailto:${email.hotel.email}?subject=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
+    window.open(mailtoLink, '_blank');
+  };
+
+  const openAllEmails = () => {
+    if (generatedEmails.length === 0) return;
+    
+    generatedEmails.forEach((email, index) => {
+      setTimeout(() => {
+        openEmailClient(email);
+      }, index * 1000);
+    });
+    
+    alert(`${generatedEmails.length} emails vont s'ouvrir (un par seconde)`);
+  };
+
+  const canSendRequest = bookingRequest.city && bookingRequest.checkIn && 
+    bookingRequest.checkOut && bookingRequest.totalPersons &&
+    (bookingRequest.single || bookingRequest.doubleTwin || bookingRequest.triple || bookingRequest.family);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <Hotel className="w-16 h-16 text-indigo-600 mx-auto mb-4 animate-pulse" />
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Hotel className="w-10 h-10 text-indigo-600" />
+            <h1 className="text-3xl font-bold text-gray-800">Gestion Hôtelière</h1>
+          </div>
+
+          <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5 mb-8">
+            <h3 className="text-base font-bold text-amber-900 mb-3">💾 Sauvegarde & Partage</h3>
+            <div className="flex flex-wrap gap-3 mb-3">
+              <button
+                onClick={exportDatabase}
+                className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={hotels.length === 0}
+              >
+                <Download className="w-5 h-5" />
+                Télécharger la base de données
+              </button>
+              <label className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition font-medium cursor-pointer">
+                <Upload className="w-5 h-5" />
+                Importer une sauvegarde
+                <input type="file" accept=".json" onChange={importDatabase} className="hidden" />
+              </label>
+            </div>
+            <p className="text-sm text-amber-800">
+              ℹ️ Téléchargez pour sauvegarder ou partager avec vos collaborateurs
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <button 
+              onClick={() => setShowAddForm(!showAddForm)} 
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition"
+            >
+              <Plus className="w-5 h-5" />
+              Ajouter un hôtel
+            </button>
+            <button 
+              onClick={() => setShowRequestForm(!showRequestForm)} 
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+              disabled={hotels.length === 0}
+            >
+              <Send className="w-5 h-5" />
+              Nouvelle demande
+            </button>
+          </div>
+
+          {showAddForm && (
+            <div className="bg-blue-50 p-6 rounded-xl mb-8 border-2 border-blue-200">
+              <h2 className="text-xl font-semibold mb-4">{editingHotel ? '✏️ Modifier l\'hôtel' : '➕ Nouvel hôtel'}</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <input 
+                  type="text" 
+                  placeholder="Nom de l'hôtel" 
+                  value={newHotel.name} 
+                  onChange={(e) => setNewHotel({...newHotel, name: e.target.value})} 
+                  className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                />
+                <input 
+                  type="text" 
+                  placeholder="Ville" 
+                  value={newHotel.city} 
+                  onChange={(e) => setNewHotel({...newHotel, city: e.target.value})} 
+                  className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                />
+                <input 
+                  type="email" 
+                  placeholder="Email" 
+                  value={newHotel.email} 
+                  onChange={(e) => setNewHotel({...newHotel, email: e.target.value})} 
+                  className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                />
+                <select 
+                  value={newHotel.stars} 
+                  onChange={(e) => setNewHotel({...newHotel, stars: parseInt(e.target.value)})} 
+                  className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none"
+                >
+                  {[1,2,3,4,5].map(n => (
+                    <option key={n} value={n}>{n} ⭐</option>
+                  ))}
+                </select>
+                <textarea 
+                  placeholder="Notes (optionnel)" 
+                  value={newHotel.notes} 
+                  onChange={(e) => setNewHotel({...newHotel, notes: e.target.value})} 
+                  className="md:col-span-2 px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                  rows="3" 
+                />
+              </div>
+              <div className="flex gap-3 mt-4">
+                <button 
+                  onClick={editingHotel ? updateHotel : addHotel} 
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition"
+                >
+                  {editingHotel ? 'Mettre à jour' : 'Enregistrer'}
+                </button>
+                <button 
+                  onClick={cancelEdit} 
+                  className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg transition"
+                >
+                  Annuler
+                </button>
+              </div>
+            </div>
+          )}
+
+          {showRequestForm && (
+            <div className="bg-green-50 p-6 rounded-xl mb-8 border-2 border-green-200">
+              <h2 className="text-xl font-semibold mb-4">📧 Demande de disponibilité</h2>
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Ville *</label>
+                  <select 
+                    value={bookingRequest.city} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, city: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none"
+                  >
+                    <option value="">Sélectionner une ville</option>
+                    {cities.map(city => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Total personnes (pax) *</label>
+                  <input 
+                    type="number" 
+                    min="1" 
+                    value={bookingRequest.totalPersons} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, totalPersons: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Date d'arrivée *</label>
+                  <input 
+                    type="date" 
+                    value={bookingRequest.checkIn} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, checkIn: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Date de départ *</label>
+                  <input 
+                    type="date" 
+                    value={bookingRequest.checkOut} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, checkOut: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                  />
+                </div>
+              </div>
+              <h3 className="font-semibold mb-3">🛏️ Chambres requises *</h3>
+              <div className="grid md:grid-cols-4 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm mb-1">Single</label>
+                  <input 
+                    type="number" 
+                    min="0" 
+                    value={bookingRequest.single} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, single: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Double/Twin</label>
+                  <input 
+                    type="number" 
+                    min="0" 
+                    value={bookingRequest.doubleTwin} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, doubleTwin: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Triple</label>
+                  <input 
+                    type="number" 
+                    min="0" 
+                    value={bookingRequest.triple} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, triple: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Familiale</label>
+                  <input 
+                    type="number" 
+                    min="0" 
+                    value={bookingRequest.family} 
+                    onChange={(e) => setBookingRequest({...bookingRequest, family: e.target.value})} 
+                    className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                  />
+                </div>
+              </div>
+              <button 
+                onClick={generateAllEmails} 
+                disabled={!canSendRequest} 
+                className={`px-6 py-3 rounded-lg flex items-center gap-2 transition ${canSendRequest ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+              >
+                <Send className="w-5 h-5" />
+                Générer les emails
+              </button>
+            </div>
+          )}
+
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+              <Building2 className="w-6 h-6" />
+              Base de données ({hotels.length} hôtel{hotels.length > 1 ? 's' : ''})
+            </h2>
             
-            if (hotelsInCity.length === 0) {
-              alert('Aucun hôtel trouvé dans cette ville');
-              return;
-            }
+            <div className="mb-6 relative">
+              <input 
+                type="text" 
+                placeholder="Rechercher par nom ou ville..." 
+                value={searchTerm} 
+                onChange={(e) => setSearchTerm(e.target.value)} 
+                className="w-full px-4 py-3 pl-12 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+              />
+              <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
+              {searchTerm && (
+                <p className="text-sm text-gray-600 mt-2">
+                  {filteredHotels.length} résultat{filteredHotels.length > 1 ? 's' : ''}
+                </p>
+              )}
+            </div>
 
-            const emails = hotelsInCity.map(hotel => ({
-              hotel: hotel,
-              subject: `Availability request group ${bookingRequest.totalPersons} pax`,
-              body: generateEmailText()
-            }));
-
-            setGeneratedEmails(emails);
-            setShowEmailsModal(true);
-          };
-
-          const copyToClipboard = (text, index) => {
-            navigator.clipboard.writeText(text).then(() => {
-              setCopiedIndex(index);
-              setTimeout(() => setCopiedIndex(null), 2000);
-            });
-          };
-
-          const openEmailClient = (email) => {
-            const mailtoLink = `mailto:${email.hotel.email}?subject=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
-            window.location.href = mailtoLink;
-          };
-
-          const openAllEmails = () => {
-            if (generatedEmails.length === 0) return;
-            
-            openEmailClient(generatedEmails[0]);
-            
-            generatedEmails.slice(1).forEach((email, index) => {
-              setTimeout(() => {
-                openEmailClient(email);
-              }, (index + 1) * 1000);
-            });
-            
-            alert(`${generatedEmails.length} emails vont s'ouvrir (un par seconde)`);
-          };
-
-          const canSendRequest = bookingRequest.city && bookingRequest.checkIn && 
-            bookingRequest.checkOut && bookingRequest.totalPersons &&
-            (bookingRequest.single || bookingRequest.doubleTwin || bookingRequest.triple || bookingRequest.family);
-
-          return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-              <div className="max-w-6xl mx-auto">
-                <div className="bg-white rounded-2xl shadow-xl p-8">
-                  <div className="flex items-center gap-3 mb-6">
-                    <Hotel />
-                    <h1 className="text-3xl font-bold text-gray-800">Gestion Hôtelière</h1>
-                  </div>
-
-                  <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5 mb-8">
-                    <h3 className="text-base font-bold text-amber-900 mb-3">💾 Sauvegarde & Partage</h3>
-                    <div className="flex flex-wrap gap-3 mb-3">
-                      <button
-                        onClick={exportDatabase}
-                        className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition font-medium"
-                        disabled={hotels.length === 0}
+            {hotels.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                <Hotel className="w-16 h-16 mx-auto mb-4 opacity-30" />
+                <p className="text-lg">Aucun hôtel enregistré</p>
+                <p className="text-sm mt-2">Cliquez sur "Ajouter un hôtel" pour commencer</p>
+              </div>
+            ) : filteredHotels.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                <Search className="w-16 h-16 mx-auto mb-4 opacity-30" />
+                <p className="text-lg">Aucun résultat pour "{searchTerm}"</p>
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {filteredHotels.map(hotel => (
+                  <div key={hotel.id} className="bg-gray-50 p-4 rounded-lg flex justify-between items-start hover:bg-gray-100 transition">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-semibold text-lg">{hotel.name}</h3>
+                        <div className="flex gap-1">
+                          {[...Array(hotel.stars)].map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex gap-4 text-sm text-gray-600 mb-2">
+                        <span className="flex items-center gap-1">
+                          <Building2 className="w-4 h-4" />
+                          {hotel.city}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Mail className="w-4 h-4" />
+                          {hotel.email}
+                        </span>
+                      </div>
+                      {hotel.notes && (
+                        <p className="text-sm text-gray-500 italic mt-2 bg-white p-2 rounded">
+                          📝 {hotel.notes}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => startEdit(hotel)} 
+                        className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg transition" 
+                        title="Modifier"
                       >
-                        <Download className="w-5 h-5" />
-                        Télécharger la base de données
+                        <Edit className="w-5 h-5" />
                       </button>
-                      <label className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition font-medium cursor-pointer">
-                        <Upload className="w-5 h-5" />
-                        Importer une sauvegarde
-                        <input type="file" accept=".json" onChange={importDatabase} className="hidden" />
-                      </label>
-                    </div>
-                    <p className="text-sm text-amber-800">
-                      ℹ️ Téléchargez pour sauvegarder ou partager avec vos collaborateurs
-                    </p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6 mb-8">
-                    <button onClick={() => setShowAddForm(!showAddForm)} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2">
-                      <Plus className="w-5 h-5" />Ajouter un hôtel
-                    </button>
-                    <button onClick={() => setShowRequestForm(!showRequestForm)} className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2" disabled={hotels.length === 0}>
-                      <Send className="w-5 h-5" />Nouvelle demande
-                    </button>
-                  </div>
-
-                  {showAddForm && (
-                    <div className="bg-blue-50 p-6 rounded-xl mb-8">
-                      <h2 className="text-xl font-semibold mb-4">{editingHotel ? 'Modifier' : 'Nouvel hôtel'}</h2>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <input type="text" placeholder="Nom" value={newHotel.name} onChange={(e) => setNewHotel({...newHotel, name: e.target.value})} className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" />
-                        <input type="text" placeholder="Ville" value={newHotel.city} onChange={(e) => setNewHotel({...newHotel, city: e.target.value})} className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" />
-                        <input type="email" placeholder="Email" value={newHotel.email} onChange={(e) => setNewHotel({...newHotel, email: e.target.value})} className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" />
-                        <select value={newHotel.stars} onChange={(e) => setNewHotel({...newHotel, stars: parseInt(e.target.value)})} className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none">
-                          {[1,2,3,4,5].map(n => <option key={n} value={n}>{n} ⭐</option>)}
-                        </select>
-                        <textarea placeholder="Notes" value={newHotel.notes} onChange={(e) => setNewHotel({...newHotel, notes: e.target.value})} className="md:col-span-2 px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" rows="3" />
-                      </div>
-                      <div className="flex gap-3 mt-4">
-                        <button onClick={editingHotel ? updateHotel : addHotel} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg">
-                          {editingHotel ? 'Mettre à jour' : 'Enregistrer'}
-                        </button>
-                        {editingHotel && <button onClick={cancelEdit} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg">Annuler</button>}
-                      </div>
-                    </div>
-                  )}
-
-                  {showRequestForm && (
-                    <div className="bg-green-50 p-6 rounded-xl mb-8">
-                      <h2 className="text-xl font-semibold mb-4">Demande de disponibilité</h2>
-                      <div className="grid md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Ville</label>
-                          <select value={bookingRequest.city} onChange={(e) => setBookingRequest({...bookingRequest, city: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none">
-                            <option value="">Sélectionner</option>
-                            {cities.map(city => <option key={city} value={city}>{city}</option>)}
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Personnes (pax)</label>
-                          <input type="number" min="1" value={bookingRequest.totalPersons} onChange={(e) => setBookingRequest({...bookingRequest, totalPersons: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Arrivée</label>
-                          <input type="date" value={bookingRequest.checkIn} onChange={(e) => setBookingRequest({...bookingRequest, checkIn: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Départ</label>
-                          <input type="date" value={bookingRequest.checkOut} onChange={(e) => setBookingRequest({...bookingRequest, checkOut: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" />
-                        </div>
-                      </div>
-                      <h3 className="font-semibold mb-3">Chambres</h3>
-                      <div className="grid md:grid-cols-4 gap-4 mb-4">
-                        <div><label className="block text-sm mb-1">Single</label><input type="number" min="0" value={bookingRequest.single} onChange={(e) => setBookingRequest({...bookingRequest, single: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" /></div>
-                        <div><label className="block text-sm mb-1">Double/Twin</label><input type="number" min="0" value={bookingRequest.doubleTwin} onChange={(e) => setBookingRequest({...bookingRequest, doubleTwin: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" /></div>
-                        <div><label className="block text-sm mb-1">Triple</label><input type="number" min="0" value={bookingRequest.triple} onChange={(e) => setBookingRequest({...bookingRequest, triple: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" /></div>
-                        <div><label className="block text-sm mb-1">Familiale</label><input type="number" min="0" value={bookingRequest.family} onChange={(e) => setBookingRequest({...bookingRequest, family: e.target.value})} className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" /></div>
-                      </div>
-                      <button onClick={generateAllEmails} disabled={!canSendRequest} className={`px-6 py-3 rounded-lg flex items-center gap-2 ${canSendRequest ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-gray-500'}`}>
-                        <Send className="w-5 h-5" />Générer les emails
+                      <button 
+                        onClick={() => deleteHotel(hotel.id)} 
+                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition" 
+                        title="Supprimer"
+                      >
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
-                  )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
-                  <div className="mt-8">
-                    <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                      <Building2 className="w-6 h-6" />Base de données ({hotels.length})
-                    </h2>
-                    <div className="mb-6 relative">
-                      <input type="text" placeholder="Rechercher..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full px-4 py-3 pl-12 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" />
-                      <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-                      {searchTerm && <p className="text-sm text-gray-600 mt-2">{filteredHotels.length} résultat(s)</p>}
-                    </div>
+      {showEmailsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b flex items-center justify-between bg-gradient-to-r from-green-50 to-blue-50">
+              <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                <Mail className="w-6 h-6 text-green-600" />
+                Emails générés ({generatedEmails.length})
+              </h2>
+              <button 
+                onClick={() => setShowEmailsModal(false)} 
+                className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-                    {hotels.length === 0 ? (
-                      <div className="text-center py-12 text-gray-500"><Hotel /><p className="mt-4">Aucun hôtel</p></div>
-                    ) : filteredHotels.length === 0 ? (
-                      <div className="text-center py-12 text-gray-500"><Search className="w-16 h-16 mx-auto mb-4 opacity-30" /><p>Aucun résultat</p></div>
-                    ) : (
-                      <div className="grid gap-4">
-                        {filteredHotels.map(hotel => (
-                          <div key={hotel.id} className="bg-gray-50 p-4 rounded-lg flex justify-between hover:bg-gray-100">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-2">
-                                <h3 className="font-semibold text-lg">{hotel.name}</h3>
-                                <div className="flex gap-1">{[...Array(hotel.stars)].map((_, i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}</div>
-                              </div>
-                              <div className="flex gap-4 text-sm text-gray-600 mb-2">
-                                <span className="flex items-center gap-1"><Building2 className="w-4 h-4" />{hotel.city}</span>
-                                <span className="flex items-center gap-1"><Mail className="w-4 h-4" />{hotel.email}</span>
-                              </div>
-                              {hotel.notes && <p className="text-sm text-gray-500 italic mt-2">📝 {hotel.notes}</p>}
-                            </div>
-                            <div className="flex gap-2">
-                              <button onClick={() => startEdit(hotel)} className="text-blue-500 hover:text-blue-700 p-2 hover:bg-blue-50 rounded-lg" title="Modifier"><Edit className="w-5 h-5" /></button>
-                              <button onClick={() => deleteHotel(hotel.id)} className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg" title="Supprimer"><Trash2 className="w-5 h-5" /></button>
-                            </div>
+            <div className="p-6 border-b bg-blue-50">
+              <button 
+                onClick={openAllEmails} 
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition font-medium"
+              >
+                <Send className="w-5 h-5" />
+                Ouvrir tous les emails ({generatedEmails.length})
+              </button>
+              <p className="text-sm text-gray-600 mt-2">
+                ⚠️ Les emails s'ouvriront dans votre client de messagerie par défaut (un par seconde)
+              </p>
+            </div>
+
+            <div className="overflow-y-auto flex-1 p-6">
+              <div className="space-y-6">
+                {generatedEmails.map((email, index) => (
+                  <div key={index} className="border rounded-xl p-5 bg-gray-50 hover:bg-gray-100 transition">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-1">{email.hotel.name}</h3>
+                        <p className="text-sm text-gray-600 flex items-center gap-1">
+                          <Mail className="w-4 h-4" />
+                          {email.hotel.email}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                            {email.hotel.city}
+                          </span>
+                          <div className="flex gap-1">
+                            {[...Array(email.hotel.stars)].map((_, i) => (
+                              <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                            ))}
                           </div>
-                        ))}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={() => copyToClipboard(email.body, index)} 
+                          className="text-gray-600 hover:text-gray-800 p-2 hover:bg-gray-200 rounded-lg transition" 
+                          title="Copier le message"
+                        >
+                          {copiedIndex === index ? (
+                            <Check className="w-5 h-5 text-green-600" />
+                          ) : (
+                            <Copy className="w-5 h-5" />
+                          )}
+                        </button>
+                        <button 
+                          onClick={() => openEmailClient(email)} 
+                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+                        >
+                          <Send className="w-4 h-4" />
+                          Ouvrir
+                        </button>
+                      </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg border">
+                      <p className="text-sm font-semibold text-gray-700 mb-2">
+                        📨 Objet: {email.subject}
+                      </p>
+                      <pre className="text-sm text-gray-700 whitespace-pre-wrap font-sans">
+                        {email.body}
+                      </pre>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default HotelManagementApp;
