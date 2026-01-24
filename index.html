@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Hôtelière - Agence de Voyage</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // Lucide Icons as inline SVG components
+        const Hotel = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h18M3 15h18"/><path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2"/><path d="M3 9V5a2 2 0 0 1 2-2h2"/><path d="M7 3v4"/><path d="M21 9V5a2 2 0 0 0-2-2h-2"/><path d="M17 3v4"/><path d="M10 12v6"/><path d="M14 12v6"/></svg>;
+        
+        const Mail = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>;
+        
+        const Plus = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>;
+        
+        const Send = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>;
+        
+        const Star = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+        
+        const Trash2 = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>;
+        
+        const Building2 = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>;
+        
+        const Copy = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>;
+        
+        const Check = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
+        
+        const X = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
+        
+        const Edit = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>;
+        
+        const Search = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>;
+        
+        const Download = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>;
+        
+        const Upload = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>;
+
+        function HotelManagementApp() {
+          const [hotels, setHotels] = useState([]);
+          const [showAddForm, setShowAddForm] = useState(false);
+          const [showRequestForm, setShowRequestForm] = useState(false);
+          const [showEmailsModal, setShowEmailsModal] = useState(false);
+          const [generatedEmails, setGeneratedEmails] = useState([]);
+          const [copiedIndex, setCopiedIndex] = useState(null);
+          const [editingHotel, setEditingHotel] = useState(null);
+          const [searchTerm, setSearchTerm] = useState('');
+          const [loading, setLoading] = useState(true);
+          
+          const [newHotel, setNewHotel] = useState({
+            name: '',
+            city: '',
+            email: '',
+            stars: 3,
+            notes: ''
+          });
+
+          const [bookingRequest, setBookingRequest] = useState({
+            city: '',
+            checkIn: '',
+            checkOut: '',
+            totalPersons: '',
+            single: '',
+            doubleTwin: '',
+            triple: '',
+            family: ''
+          });
+
+          useEffect(() => {
+            loadData();
+          }, []);
+
+          useEffect(() => {
+            if (!loading && hotels.length > 0) {
+              saveData();
+            }
+          }, [hotels, loading]);
+
+          const loadData = () => {
+            const saved = localStorage.getItem('hotels-database');
+            if (saved) {
+              try {
+                setHotels(JSON.parse(saved));
+              } catch (e) {
+                console.error('Erreur de chargement:', e);
+              }
+            }
+            setLoading(false);
+          };
+
+          const saveData = () => {
+            localStorage.setItem('hotels-database', JSON.stringify(hotels));
+          };
+
+          const addHotel = () => {
+            if (newHotel.name && newHotel.city && newHotel.email) {
+              setHotels([...hotels, { ...newHotel, id: Date.now() }]);
+              setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
+              setShowAddForm(false);
+            }
+          };
+
+          const deleteHotel = (id) => {
+            if (window.confirm('Êtes-vous sûr de vouloir supprimer cet hôtel ?')) {
+              setHotels(hotels.filter(h => h.id !== id));
+            }
+          };
+
+          const startEdit = (hotel) => {
+            setEditingHotel(hotel);
+            setNewHotel({
+              name: hotel.name,
+              city: hotel.city,
+              email: hotel.email,
+              stars: hotel.stars,
+              notes: hotel.notes || ''
+            });
+            setShowAddForm(true);
+          };
+
+          const updateHotel = () => {
+            if (newHotel.name && newHotel.city && newHotel.email) {
+              setHotels(hotels.map(h => 
+                h.id === editingHotel.id 
+                  ? { ...newHotel, id: editingHotel.id }
+                  : h
+              ));
+              setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
+              setEditingHotel(null);
+              setShowAddForm(false);
+            }
+          };
+
+          const cancelEdit = () => {
+            setEditingHotel(null);
+            setNewHotel({ name: '', city: '', email: '', stars: 3, notes: '' });
+            setShowAddForm(false);
+          };
+
+          const exportDatabase = () => {
+            const dataStr = JSON.stringify(hotels, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `hotels-database-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+          };
+
+          const importDatabase = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              try {
+                const importedHotels = JSON.parse(e.target.result);
+                if (Array.isArray(importedHotels)) {
+                  const confirmed = window.confirm(
+                    `Importer ${importedHotels.length} hôtel(s) ?\n\nAttention: Cela remplacera votre base de données actuelle (${hotels.length} hôtel(s)).`
+                  );
+                  if (confirmed) {
+                    setHotels(importedHotels);
+                    alert(`✅ ${importedHotels.length} hôtel(s) importé(s) avec succès !`);
+                  }
+                } else {
+                  alert('❌ Fichier invalide. Le fichier doit contenir une liste d\'hôtels.');
+                }
+              } catch (error) {
+                alert('❌ Erreur lors de la lecture du fichier.');
+              }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+          };
+
+          const cities = [...new Set(hotels.map(h => h.city))].sort();
+
+          const filteredHotels = hotels.filter(hotel => {
+            const search = searchTerm.toLowerCase();
+            return hotel.name.toLowerCase().includes(search) || 
+                   hotel.city.toLowerCase().includes(search);
+          });
+
+          const generateEmailText = () => {
+            const rooms = [];
+            if (bookingRequest.single) rooms.push(`${bookingRequest.single} Single room(s)`);
+            if (bookingRequest.doubleTwin) rooms.push(`${bookingRequest.doubleTwin} Double/Twin room(s)`);
+            if (bookingRequest.triple) rooms.push(`${bookingRequest.triple} Triple room(s)`);
+            if (bookingRequest.family) rooms.push(`${bookingRequest.family} Family room(s)`);
+
+            return `Hi,
+
+We are looking for availability for a group of ${bookingRequest.totalPersons} person(s).
+
+Requested dates:
+- Check-in: ${new Date(bookingRequest.checkIn).toLocaleDateString('en-GB')}
+- Check-out: ${new Date(bookingRequest.checkOut).toLocaleDateString('en-GB')}
+
+Rooms required:
+${rooms.join('\n')}
+
+Could you please confirm:
+1. Room availability for these dates
+2. Your rates (breakfast included)
+3. Your booking conditions
+
+We remain at your disposal for any further information.
+
+Best regards`;
+          };
+
+          const generateAllEmails = () => {
+            const hotelsInCity = hotels.filter(h => h.city === bookingRequest.city);
+            
+            if (hotelsInCity.length === 0) {
+              alert('Aucun hôtel trouvé dans cette ville');
+              return;
+            }
+
+            const emails = hotelsInCity.map(hotel => ({
+              hotel: hotel,
+              subject: `Availability request group ${bookingRequest.totalPersons} pax`,
+              body: generateEmailText()
+            }));
+
+            setGeneratedEmails(emails);
+            setShowEmailsModal(true);
+          };
+
+          const copyToClipboard = (text, index) => {
+            navigator.clipboard.writeText(text).then(() => {
+              setCopiedIndex(index);
+              setTimeout(() => setCopiedIndex(null), 2000);
+            });
+          };
+
+          const openEmailClient = (email) => {
+            const mailtoLink = `mailto:${email.hotel.email}?subject=${encodeURIComponent(email.subject)}&body=${encodeURIComponent(email.body)}`;
+            window.open(mailtoLink, '_blank');
+          };
+
+          const openAllEmails = () => {
+            if (generatedEmails.length === 0) return;
+            
+            generatedEmails.forEach((email, index) => {
+              setTimeout(() => {
+                openEmailClient(email);
+              }, index * 1000);
+            });
+            
+            alert(`${generatedEmails.length} emails vont s'ouvrir (un par seconde)`);
+          };
+
+          const canSendRequest = bookingRequest.city && bookingRequest.checkIn && 
+            bookingRequest.checkOut && bookingRequest.totalPersons &&
+            (bookingRequest.single || bookingRequest.doubleTwin || bookingRequest.triple || bookingRequest.family);
+
+          if (loading) {
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+                <div className="text-center">
+                  <Hotel className="w-16 h-16 text-indigo-600 mx-auto mb-4 animate-pulse" />
+                  <p className="text-gray-600">Chargement...</p>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+              <div className="max-w-6xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-xl p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Hotel className="w-10 h-10 text-indigo-600" />
+                    <h1 className="text-3xl font-bold text-gray-800">Gestion Hôtelière</h1>
+                  </div>
+
+                  <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5 mb-8">
+                    <h3 className="text-base font-bold text-amber-900 mb-3">💾 Sauvegarde & Partage</h3>
+                    <div className="flex flex-wrap gap-3 mb-3">
+                      <button
+                        onClick={exportDatabase}
+                        className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={hotels.length === 0}
+                      >
+                        <Download className="w-5 h-5" />
+                        Télécharger la base de données
+                      </button>
+                      <label className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 transition font-medium cursor-pointer">
+                        <Upload className="w-5 h-5" />
+                        Importer une sauvegarde
+                        <input type="file" accept=".json" onChange={importDatabase} className="hidden" />
+                      </label>
+                    </div>
+                    <p className="text-sm text-amber-800">
+                      ℹ️ Téléchargez pour sauvegarder ou partager avec vos collaborateurs
+                    </p>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <button 
+                      onClick={() => setShowAddForm(!showAddForm)} 
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition"
+                    >
+                      <Plus className="w-5 h-5" />
+                      Ajouter un hôtel
+                    </button>
+                    <button 
+                      onClick={() => setShowRequestForm(!showRequestForm)} 
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50 disabled:cursor-not-allowed" 
+                      disabled={hotels.length === 0}
+                    >
+                      <Send className="w-5 h-5" />
+                      Nouvelle demande
+                    </button>
+                  </div>
+
+                  {showAddForm && (
+                    <div className="bg-blue-50 p-6 rounded-xl mb-8 border-2 border-blue-200">
+                      <h2 className="text-xl font-semibold mb-4">{editingHotel ? '✏️ Modifier l\'hôtel' : '➕ Nouvel hôtel'}</h2>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <input 
+                          type="text" 
+                          placeholder="Nom de l'hôtel" 
+                          value={newHotel.name} 
+                          onChange={(e) => setNewHotel({...newHotel, name: e.target.value})} 
+                          className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                        />
+                        <input 
+                          type="text" 
+                          placeholder="Ville" 
+                          value={newHotel.city} 
+                          onChange={(e) => setNewHotel({...newHotel, city: e.target.value})} 
+                          className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                        />
+                        <input 
+                          type="email" 
+                          placeholder="Email" 
+                          value={newHotel.email} 
+                          onChange={(e) => setNewHotel({...newHotel, email: e.target.value})} 
+                          className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                        />
+                        <select 
+                          value={newHotel.stars} 
+                          onChange={(e) => setNewHotel({...newHotel, stars: parseInt(e.target.value)})} 
+                          className="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none"
+                        >
+                          {[1,2,3,4,5].map(n => (
+                            <option key={n} value={n}>{n} ⭐</option>
+                          ))}
+                        </select>
+                        <textarea 
+                          placeholder="Notes (optionnel)" 
+                          value={newHotel.notes} 
+                          onChange={(e) => setNewHotel({...newHotel, notes: e.target.value})} 
+                          className="md:col-span-2 px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none" 
+                          rows="3" 
+                        />
+                      </div>
+                      <div className="flex gap-3 mt-4">
+                        <button 
+                          onClick={editingHotel ? updateHotel : addHotel} 
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition"
+                        >
+                          {editingHotel ? 'Mettre à jour' : 'Enregistrer'}
+                        </button>
+                        <button 
+                          onClick={cancelEdit} 
+                          className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg transition"
+                        >
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {showRequestForm && (
+                    <div className="bg-green-50 p-6 rounded-xl mb-8 border-2 border-green-200">
+                      <h2 className="text-xl font-semibold mb-4">📧 Demande de disponibilité</h2>
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Ville *</label>
+                          <select 
+                            value={bookingRequest.city} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, city: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none"
+                          >
+                            <option value="">Sélectionner une ville</option>
+                            {cities.map(city => (
+                              <option key={city} value={city}>{city}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Total personnes (pax) *</label>
+                          <input 
+                            type="number" 
+                            min="1" 
+                            value={bookingRequest.totalPersons} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, totalPersons: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Date d'arrivée *</label>
+                          <input 
+                            type="date" 
+                            value={bookingRequest.checkIn} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, checkIn: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Date de départ *</label>
+                          <input 
+                            type="date" 
+                            value={bookingRequest.checkOut} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, checkOut: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                          />
+                        </div>
+                      </div>
+                      <h3 className="font-semibold mb-3">🛏️ Chambres requises *</h3>
+                      <div className="grid md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                          <label className="block text-sm mb-1">Single</label>
+                          <input 
+                            type="number" 
+                            min="0" 
+                            value={bookingRequest.single} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, single: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm mb-1">Double/Twin</label>
+                          <input 
+                            type="number" 
+                            min="0" 
+                            value={bookingRequest.doubleTwin} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, doubleTwin: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm mb-1">Triple</label>
+                          <input 
+                            type="number" 
+                            min="0" 
+                            value={bookingRequest.triple} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, triple: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm mb-1">Familiale</label>
+                          <input 
+                            type="number" 
+                            min="0" 
+                            value={bookingRequest.family} 
+                            onChange={(e) => setBookingRequest({...bookingRequest, family: e.target.value})} 
+                            className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-green-500 outline-none" 
+                          />
+                        </div>
+                      </div>
+                      <button 
+                        onClick={generateAllEmails} 
+                        disabled={!canSendRequest} 
+                        className={`px-6 py-3 rounded-lg flex items-center gap-2 transition ${canSendRequest ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+                      >
+                        <Send className="w-5 h-5" />
+                        Générer les emails
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="mt-8">
+                    <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                      <Building2 className="w-6 h-6" />
+                      Base de données ({hotels.length} hôtel{hotels.length > 1 ? 's' : ''})
+                
